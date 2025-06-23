@@ -18,7 +18,7 @@ def fetch_current_album():
         "reviews_url": data["globalReviewsUrl"],
         "wikipedia_url": data.get("wikipediaUrl"),
         "spotify_url": f"https://open.spotify.com/album{data['spotifyId']}" if data.get("spotifyId") else None,
-        "apple_music_url": f"https://music.apple.com/album/{data["appleMusicId"]}" if data.get("appleMusicId") else None
+        "apple_music_url": f"https://music.apple.com/album/{data['appleMusicId']}" if data.get("appleMusicId") else None
     }
 
 def send_to_discord(album):
