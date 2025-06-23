@@ -23,10 +23,10 @@ def fetch_current_album():
 
 def send_to_discord(album):
     embed = {
-        "title": f"***{album['title']}*** - **Artist: {album['artist']}**",
+        "title": f"***{album['title']}*** - **{album['artist']}**",
         "description": f"**Year:** {album['year']}\n"
                        + (f"**Genre(s):** {album['genres']}\n" if album['genres'] else "")
-                       + f"[Reviews]({album['reviews_url']})\n"
+                       + f" • [Reviews]({album['reviews_url']})\n"
                        + (f" • [Wikipedia]({album['wikipedia_url']})\n" if album['wikipedia_url'] else "")
                        + (f" • [Spotify]({album['spotify_url']})\n" if album['spotify_url'] else "")
                        + (f" • [Apple Music]({album['apple_music_url']})" if album['apple_music_url'] else ""),
