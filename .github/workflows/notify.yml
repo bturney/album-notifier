@@ -2,7 +2,7 @@ name: Album Notifier
 
 on:
   schedule:
-    - cron: '0 13 * * 1-5' # 9am Eastern, Mon-Fri
+    - cron: '0 12 * * 1-5' # 8am Eastern, Mon-Fri
   workflow_dispatch:
 
 jobs:
