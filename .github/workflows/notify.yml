@@ -23,4 +23,5 @@ jobs:
       - name: Run Notifier
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          API_URL: ${{ secrets.API_URL }}
         run: python notify.py

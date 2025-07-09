@@ -1,7 +1,7 @@
 import requests
 import os
 
-API_URL = "https://1001albumsgenerator.com/api/v1/groups/musicnerds"
+API_URL = os.environ["API_URL"]
 DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
 
 def build_album_embed(data):
