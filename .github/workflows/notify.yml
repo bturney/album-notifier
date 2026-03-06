@@ -2,7 +2,15 @@ name: Album Notifier
 
 on:
   schedule:
-    - cron: '0 12 * * 1-5' # 8am Eastern, Mon-Fri
+    # Default: Mon-Fri at 8am US Eastern (12:00 UTC)
+    # Note: GitHub Actions uses UTC. Your notification time will shift
+    # by 1 hour when Daylight Saving Time changes. See README for details.
+    # Include weekends: '0 12 * * *'
+    # Common times (Mon-Fri):
+    #   9am US Eastern = '0 13 * * 1-5'
+    #   8am US Pacific = '0 15 * * 1-5'
+    #   9am UK         = '0 9 * * 1-5'
+    - cron: '0 12 * * 1-5'
   workflow_dispatch:
 
 jobs:
@@ -12,16 +20,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: '3.11'
-
-      - name: Install deps
-        run: pip install requests
+          python-version: '3.13'
 
       - name: Run Notifier
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           API_URL: ${{ secrets.API_URL }}
-        run: python notify.py
+        run: uv run python notify.py

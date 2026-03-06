@@ -1,86 +1,136 @@
-# Discord Album Notifier 🎵
+# Discord Album Notifier
 
-A simple Python script that fetches the daily album from [1001albumsgenerator.com](https://1001albumsgenerator.com) and posts it to a Discord webhook with group statistics and favorites.
+Automatically posts your [1001 Albums Generator](https://1001albumsgenerator.com) daily album to a Discord channel — with group stats, streaming links, and your all-time favorites.
 
-## Features
+> Listed as a third-party app on 1001albumsgenerator.com
 
-- 🎧 Posts daily album notifications to Discord
-- 🏆 Shows group's all-time favorite album
-- 💀 Shows group's least favorite album  
-- 🌟 Displays favorite and least favorite genres
-- 📊 Includes group statistics (albums rated, votes cast, average rating)
-- 🔗 Provides streaming links (Spotify, Apple Music, etc.)
+---
 
-## Setup
+## What it posts
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd album-notifier
-   ```
+Each day, your Discord channel gets a message like this:
 
-2. **Install dependencies**
-   ```bash
-   pip install requests
-   ```
+**🎵 Rumours – Fleetwood Mac (1977)**
+🎭 Genre(s): Soft Rock, Pop Rock
+[Reviews] | [Wikipedia] | [Spotify] | [Apple Music]
 
-3. **Set up Discord webhook**
-   - Go to your Discord server settings
-   - Navigate to Integrations → Webhooks
-   - Create a new webhook and copy the URL
+> 🏆 All-Time Favorite: *Abbey Road* - The Beatles (4.8/5)
+> 💀 Least Favorite: *Some Album* - Some Artist (1.1/5)
+> 🌟 Favorite Genre: Classic Rock (3.9/5 avg) · 👎 Worst Genre: Disco (1.4/5 avg)
+> 📊 42 albums rated, 168 votes cast. Group average: 3.2/5
 
-4. **Set environment variables**
-   ```bash
-   export DISCORD_WEBHOOK_URL="your-discord-webhook-url-here"
-   export API_URL="https://1001albumsgenerator.com/api/v1/groups/your-group-slug"
-   ```
+---
 
-## Usage
+## Quick Start (5 minutes)
 
-Run the script:
-```bash
-python notify.py
+### 1. Create your copy
+
+Click **"Use this template"** at the top of this page, then **"Create a new repository"**. Give it any name you like and make it private or public — your choice.
+
+> If you don't see "Use this template", you may need to be logged into GitHub.
+
+### 2. Find your API URL
+
+1. Go to [1001albumsgenerator.com](https://1001albumsgenerator.com) and open your group's page
+2. Your group URL looks like: `https://1001albumsgenerator.com/groups/your-group-slug`
+3. Your API URL is: `https://1001albumsgenerator.com/api/v1/groups/your-group-slug`
+
+(Just add `/api/v1` before `/groups` in the URL.)
+
+### 3. Create a Discord webhook
+
+1. Open your Discord server
+2. Go to **Server Settings** → **Integrations** → **Webhooks**
+3. Click **New Webhook**
+4. Choose the channel where albums should be posted
+5. Click **Copy Webhook URL** — save this for the next step
+
+> **Keep this URL secret.** Anyone who has it can post messages to your channel. Don't paste it into code or share it publicly — that's exactly what the GitHub secret in the next step is for.
+
+### 4. Add your secrets to GitHub
+
+In your new repository, go to **Settings** → **Secrets and variables** → **Actions**, then click **New repository secret** for each:
+
+| Name | Value |
+|------|-------|
+| `API_URL` | Your API URL from Step 2 |
+| `DISCORD_WEBHOOK_URL` | Your webhook URL from Step 3 |
+
+### 5. Test it
+
+Go to the **Actions** tab in your repository, click **Album Notifier** in the left sidebar, then click **Run workflow** → **Run workflow**. Check your Discord channel — the album should appear within a minute.
+
+---
+
+## Customizing your schedule
+
+The notifier runs **Monday–Friday at 8am US Eastern** by default. To change this, edit `.github/workflows/notify.yml` and update the `cron:` line.
+
+Some common options are already in the file as comments:
+
+```yaml
+# Include weekends:       '0 12 * * *'
+# 9am US Eastern:        '0 13 * * 1-5'
+# 8am US Pacific:        '0 15 * * 1-5'
+# 9am UK:                '0 9 * * 1-5'
 ```
 
-The script will:
-1. Fetch the current album from your 1001albumsgenerator group
-2. Build a rich Discord embed with album info and group statistics
-3. Post it to your Discord channel
+GitHub Actions uses **UTC time**, so the examples above account for timezone offsets.
 
-## Example Output
+> **Note on Daylight Saving Time:** GitHub Actions cron doesn't automatically adjust for DST. When clocks change, your notification will shift by 1 hour. You can manually update the cron line twice a year, or simply accept the 1-hour drift.
 
-The script creates a Discord embed that looks like:
+---
 
-**Title:** 🎵 **Album Name** – **Artist** (Year)
+## Keeping it running
 
-**Description:**
-- 🎭 **Genre(s):** Rock, Pop
-- [Reviews] | [Wikipedia] | [Spotify] | [Apple Music]
+GitHub automatically **disables scheduled workflows after 60 days of repository inactivity** (no commits). You'll receive an email warning before this happens.
 
-**Fields:**
-- 🏆 **All-Time Favorite:** *Album Name* - Artist (4.5/5)
-- 💀 **Least Favorite:** *Album Name* - Artist (1.2/5)  
-- 🌟 **Favorite Genre:** Rock (3.8/5 avg)
-- 👎 **Worst Genre:** Funk (1.2/5 avg)
+To keep the notifier running without any code changes, you can either:
+- **Re-enable it manually**: Go to Actions → Album Notifier → click the banner to re-enable
+- **Push any small change**: Edit any file (e.g., add a space to the README) and commit it
 
-**Footer:** 📊 28 albums rated, 111 votes cast. Group average: 2.83/5
+---
 
-## Configuration
+## Running locally
 
-The script uses environment variables for configuration:
+You'll need [uv](https://docs.astral.sh/uv/getting-started/installation/) installed.
 
-- `DISCORD_WEBHOOK_URL` (required): Your Discord webhook URL
-- `API_URL` (required): Your 1001albumsgenerator group API URL
+```bash
+# Set your environment variables
+export API_URL="https://1001albumsgenerator.com/api/v1/groups/your-group-slug"
+export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
 
-Both environment variables must be set for the script to work.
+# Validate your setup (run this first)
+uv run python validate.py
 
-## Requirements
+# Send today's album
+uv run python notify.py
+```
 
-- Python 3.6+
-- `requests` library
-- Discord webhook URL
-- 1001albumsgenerator group
+---
+
+## Troubleshooting
+
+**The workflow never runs**
+Make sure both secrets (`API_URL` and `DISCORD_WEBHOOK_URL`) are set under Settings → Secrets and variables → Actions. The script exits immediately with an error if either is missing.
+
+**I see an error in the Actions log**
+Click the failed run in the Actions tab, then click the **notify** job to see the full output. The error message will tell you exactly what went wrong.
+
+**Nothing posts to Discord**
+Run `validate.py` locally (see above) — it checks both the API and your Discord webhook and tells you specifically what's failing.
+
+**"Webhook not found" error**
+The webhook URL was deleted in Discord. Go back to Server Settings → Integrations → Webhooks, create a new one, and update the `DISCORD_WEBHOOK_URL` secret in GitHub.
+
+**Notifications stopped after ~2 months**
+GitHub disabled the scheduled workflow due to inactivity. Go to the Actions tab and re-enable it, or push any commit to the repo.
+
+**The notification time shifted by an hour**
+Daylight Saving Time changed. Update the cron line in `.github/workflows/notify.yml` if you want to keep a consistent local time.
+
+---
 
 ## License
 
-MIT License - feel free to use and modify!
+MIT — see [LICENSE](LICENSE)
