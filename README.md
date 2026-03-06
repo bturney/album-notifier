@@ -10,14 +10,8 @@ Automatically posts your [1001 Albums Generator](https://1001albumsgenerator.com
 
 Each day, your Discord channel gets a message like this:
 
-**🎵 Rumours – Fleetwood Mac (1977)**
-🎭 Genre(s): Soft Rock, Pop Rock
-[Reviews] | [Wikipedia] | [Spotify] | [Apple Music]
+<img width="568" height="326" alt="image" src="https://github.com/user-attachments/assets/e5f7e4d5-50a7-4def-9d54-bc3e6edaefb5" />
 
-> 🏆 All-Time Favorite: *Abbey Road* - The Beatles (4.8/5)
-> 💀 Least Favorite: *Some Album* - Some Artist (1.1/5)
-> 🌟 Favorite Genre: Classic Rock (3.9/5 avg) · 👎 Worst Genre: Disco (1.4/5 avg)
-> 📊 42 albums rated, 168 votes cast. Group average: 3.2/5
 
 ---
 
